@@ -32,21 +32,20 @@ for i, jd in enumerate(joltage_diffs[:-1]):
 
 d_ways = dict()
 
-def get_options(key):
+def get_options(key, d_ways):
+    if key in d_ways:
+        return d_ways[key]
+
     if key not in d_options:
         return 1
 
     ind_range = d_options[key]
+    
     curr_total = 0
     for tmp_key in range(key+ind_range, key, -1):
-        if tmp_key not in d_ways:
-            d_ways[tmp_key] = get_options(tmp_key)
-        curr_total += d_ways[tmp_key]
+        n_ways = get_options(tmp_key, d_ways)
+        curr_total += n_ways
+    d_ways[key] = curr_total
     return curr_total
-
-
-
-for k in sorted(d_options.keys())[::-1]:
-    d_ways[k] = get_options(k)
 
 print(get_options(0))
